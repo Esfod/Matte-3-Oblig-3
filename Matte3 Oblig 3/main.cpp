@@ -2,6 +2,7 @@
 #include <vector>
 #include <math.h>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -26,9 +27,10 @@ float function(float x, float y)
 vector <Vertex> createVertexVector()
 {
     vector <Vertex> mVertices;
-    float xmin = 0.0f, xmax = 1.0f, ymin = 0.0f, ymax = 0.1f, h = 0.5f;
+    float xmin = 0.0f, xmax = 2.0f, ymin = -1.0f, h = 0.5f;
     for (auto x = xmin; x < xmax; x += h)
     {
+        float ymax{ 2 - x };
         for (auto y = ymin; y < ymax; y += h)
         {
             float z = function(x, y);
@@ -49,18 +51,19 @@ vector <Vertex> createVertexVector()
 
 vector <Vertex> readFile()
 {
-    ifstream myFile;
+    fstream myFile;
     vector <Vertex> mVertices;
-    myFile.open("Vertexs.txt");
+    myFile.open("Vertexs.txt", ios::in);
     if (myFile.is_open())
     {
         myFile.ignore('\n');
-        while(!myFile.eof())
+        string line;
+        while(getline(myFile,line)) 
         {
-            float i[5];
-            char dum[6];
+            float i[6];
+            char dum[7];
             myFile >> dum[0] >> i[0] >> dum[1] >> i[1] >> dum[2] >> i[2] >> dum[3] >> i[3] >> dum[4] >> i[4] >> dum[5] >> i[5] >> dum[6];
-            mVertices.push_back(Vertex{ i[0] ,i[1] , i[2] ,i[3] ,i[4] ,i[5] });
+            mVertices.push_back(Vertex{ i[0], i[1], i[2], i[3], i[4], i[5] });
         }
         myFile.close();
     }
@@ -70,11 +73,11 @@ vector <Vertex> readFile()
 
 void writeFile(vector <Vertex> mVerticesWrite)
 {
-    ofstream myFile;
-    myFile.open("Vertexs.txt");
+    fstream myFile;
+    myFile.open("Vertexs.txt", ios::out);
     if (myFile.is_open())
     {
-        myFile << "Number of Vertices :" << mVerticesWrite.size() << '\n';
+        myFile << "Number of Vertices: " << mVerticesWrite.size() << '\n';
         for (auto i : mVerticesWrite)
         {
             myFile << '(' << i.x << ',' << i.y << ',' << i.z << '|' << i.r << ',' << i.g << ',' << i.b << ')' << '\n';
@@ -87,7 +90,10 @@ void writeFile(vector <Vertex> mVerticesWrite)
 
 int main()
 {
+    // Del 1
     vector <Vertex> mVerticesRead = readFile();
     vector <Vertex> mVerticesWrite = createVertexVector();
     writeFile(mVerticesWrite);
+
+    // Del 2
 }
