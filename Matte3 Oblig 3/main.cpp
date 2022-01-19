@@ -124,6 +124,6 @@ int main()
     writeFile(mVerticesWrite);
 
     // Del 2
-    cout << numericIntegration(function21,5000) << endl;
-    cout << numericIntegration(function21,10000) << endl;
+    cout << numericIntegration(myFunction,5000) << endl;
+    cout << numericIntegration(myFunction,10000) << endl;
 }
