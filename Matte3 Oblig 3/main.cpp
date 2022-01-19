@@ -114,7 +114,50 @@ float numericIntegration(float function(float, float), float n)
     return volume;
 }
 
+float trapezoidalRule(float function(float, float), float n)
+{
+    float volume{ 0.0f }, xmin{ 0.f }, xmax{ 2 }, ymin{ -1 }, hx{ (xmax - xmin) / n }, ymax{ 3.f }, hy = { (ymax - ymin) / n };
+    vector <float> heigt;
+    for (auto x = xmin - hx; x < xmax; x += hx)
+    {
+        for (auto y = ymin - hy; y < ymax; y += hy)
+        {
+            heigt.push_back(function(x, y));
+        }
+    }
 
+    for (auto i : heigt)
+    {
+        if (i == heigt.front() || i == heigt.back())
+            volume += i;
+        else volume += (i * 2);
+    }
+    volume *= ((hy * hx) / 2);
+    return volume;
+}
+
+float simpsonRule(float function(float, float), float n)
+{
+    float volume{ 0.0f }, xmin{ 0.f }, xmax{ 2 }, ymin{ -1 }, hx{ (xmax - xmin) / n }, ymax{ 3.f }, hy = { (ymax - ymin) / n };
+    vector <float> heigt;
+    for (auto x = xmin - hx; x < xmax; x += hx)
+    {
+        for (auto y = ymin - hy; y < ymax; y += hy)
+        {
+            heigt.push_back(function(x, y));
+        }
+    }
+
+    for (auto i {0}; i < heigt.size(); i++)
+    {
+        if (heigt[i] == heigt.front() || heigt[i] == heigt.back())
+            volume += i;
+        else if (i % 2 == 0) volume += (heigt[i] * 2);
+        else volume += (heigt[i] * 4);
+    }
+    volume *= ((hy * hx) / 3);
+    return volume;
+}
 
 int main()
 {
@@ -124,6 +167,10 @@ int main()
     writeFile(mVerticesWrite);
 
     // Del 2
-    cout << numericIntegration(myFunction,5000) << endl;
-    cout << numericIntegration(myFunction,10000) << endl;
+    cout << "numericIntegration 1000: " << numericIntegration(myFunction, 1000) << endl;
+    cout << "numericIntegration 2000: " << numericIntegration(myFunction, 2000) << endl;
+    cout << "trapezoidalRule 1000: " << trapezoidalRule(myFunction, 1000) << endl;
+    cout << "trapezoidalRule 2000: " << trapezoidalRule(myFunction, 2000) << endl;
+    cout << "simpsonRule 1000: " << simpsonRule(myFunction, 1000) << endl;
+    cout << "simpsonRule 2000: " << simpsonRule(myFunction, 2000) << endl;
 }
