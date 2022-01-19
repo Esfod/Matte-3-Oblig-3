@@ -16,11 +16,19 @@ struct Vertex {
     float b;
 };
 
-float function(float x, float y)
+float myFunction(float x, float y) // Both Del 1 and Del 2
 {
     float z = 0.0f;
     //same fuction as in task 2.3.6 in the math pdf from Dag
     z = 3 * x - pow(x, 3) - 3 * x * pow(y, 2);
+    return z;
+}
+
+float function21(float x, float y)
+{
+    float z = 0.0f;
+    //same fuction as in task 2.3.6 in the math pdf from Dag
+    z = x*x*y*y - 2*x*y*y +y*y-1;
     return z;
 }
 
@@ -30,19 +38,19 @@ vector <Vertex> createVertexVector()
     float xmin = 0.0f, xmax = 2.0f, ymin = -1.0f, h = 0.5f;
     for (auto x = xmin; x < xmax; x += h)
     {
-        float ymax{ 2 - x };
+        float ymax{ 3.f};
         for (auto y = ymin; y < ymax; y += h)
         {
-            float z = function(x, y);
+            float z = myFunction(x, y);
             mVertices.push_back(Vertex{ x, y, z, x, y, z });
-            z = function(x + h, y);
+            z = myFunction(x + h, y);
             mVertices.push_back(Vertex{ x + h, y, z, x, y, z });
-            z = function(x, y + h);
+            z = myFunction(x, y + h);
             mVertices.push_back(Vertex{ x, y + h, z, x, y, z });
             mVertices.push_back(Vertex{ x, y + h, z, x, y, z });
-            z = function(x + h, y);
+            z = myFunction(x + h, y);
             mVertices.push_back(Vertex{ x + h, y, z, x, y, z });
-            z = function(x + h, y);
+            z = myFunction(x + h, y);
             mVertices.push_back(Vertex{ x + h, y, z, x, y, z });
         }
     }
@@ -88,6 +96,26 @@ void writeFile(vector <Vertex> mVerticesWrite)
     else cout << "Error: 02 File not open E" << endl;
 }
 
+float numericIntegration(float function(float, float), float n)
+{
+    float volume{ 0.0f }, xmin{ 0.f }, xmax{ 2 }, ymin{ -1 }, hx{ (xmax - xmin) / n } , ymax {3.f}, hy = { (ymax - ymin) / n };
+   
+    for (auto x = xmin; x < xmax; x += hx)
+    {
+        for (auto y = ymin; y < ymax; y += hy)
+        {
+            float heigt = function(x, y);
+
+            float particalVolume = heigt * hy * hx;
+            volume += particalVolume;
+        }
+    }
+
+    return volume;
+}
+
+
+
 int main()
 {
     // Del 1
@@ -96,4 +124,6 @@ int main()
     writeFile(mVerticesWrite);
 
     // Del 2
+    cout << numericIntegration(function21,5000) << endl;
+    cout << numericIntegration(function21,10000) << endl;
 }
